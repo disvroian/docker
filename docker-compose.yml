@@ -1,0 +1,74 @@
+version: "3"
+
+#docker exec -it <container> mysql -uroot -p
+#docker container exec <container> nginx -s reload
+
+services:
+    nginx:
+        container_name: nginx
+        build: d.nginx
+        restart: always
+        ports:
+            - "80:80"
+        volumes:
+            - ./www:/var/www
+            - ./d.nginx/conf/www.magento.conf:/etc/nginx/conf.d/magento.conf
+        links:
+            - mysql:mysql
+            - php:php
+    
+    php:
+        container_name: php
+        build: d.php-fpm
+        restart: always
+        ports:
+            - "9000:9000"
+        volumes:
+            - ./www:/var/www
+            - ./d.php-fpm/conf/memory.ini:/usr/local/etc/php/conf.d/memory.ini
+            - ./d.php-fpm/conf/fpm-php.ini:/etc/php/7.2/fpm/php.ini
+
+    mysql:
+        container_name: mysql
+        image: mysql:5.7
+        restart: always
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=passw0rd
+            - MYSQL_DATABASE:bubbles_apis
+            - MYSQL_USER:user
+            - MYSQL_PASSWORD:password
+        volumes:
+            - ./backups/:/mnt/backups
+        links:
+            - php:php
+
+    redis:
+        image: redis:latest
+        restart: always
+        ports:
+            - "6379:6379"
+        links:
+            - php:php
+
+#    varnish:
+#        image: eeacms/varnish
+#        ports:
+#            - "6081:6081"
+#            - "6085:6085"
+#        environment:
+#            DNS_ENABLED: "true"
+#            BACKENDS_PROBE_INTERVAL: "3s"
+#            BACKENDS_PROBE_TIMEOUT: "1s"
+#            BACKENDS_PROBE_WINDOW: "3"
+#            BACKENDS_PROBE_THRESHOLD: "2"
+#            DASHBOARD_USER: "admin"
+#            DASHBOARD_PASSWORD: "admin"
+#            DASHBOARD_SERVERS: "varnish"
+#            DASHBOARD_DNS_ENABLED: "true"
+#            PARAM_VALUE: "-p http_resp_hdr_len=65536 -p http_resp_size=98304"
+#        links:
+#            - "web:web"
+#        volumes:
+#            - ./conf/varnish/default.vcl:/etc/varnish/conf.d/varnish.vcl
