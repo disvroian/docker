@@ -2,6 +2,8 @@ version: "3"
 
 #docker exec -it <container> mysql -uroot -p
 #docker container exec <container> nginx -s reload
+#magento setup:install --base-url=http://www.smarties.local/ --db-host=mysql --db-name=www_smarties_local --db-user=myuser --db-password=myuser --admin-firstname=Magento --admin-lastname=User --admin-email=user@example.com --admin-user=admin --admin-password=admin123 --language=en_US --currency=USD --timezone=America/Chicago --use-rewrites=1
+
 
 services:
     nginx:
@@ -10,9 +12,13 @@ services:
         restart: always
         ports:
             - "80:80"
+            - "443:443"
         volumes:
             - ./www:/var/www
             - ./d.nginx/conf/www.magento.conf:/etc/nginx/conf.d/magento.conf
+        environment:
+            - NGINX_SERVER_NAME:www.smarties.local
+            - NGINX_PORT:80
         links:
             - mysql:mysql
             - php:php
@@ -36,11 +42,8 @@ services:
             - "3306:3306"
         environment:
             - MYSQL_ROOT_PASSWORD=passw0rd
-            - MYSQL_DATABASE:bubbles_apis
-            - MYSQL_USER:user
-            - MYSQL_PASSWORD:password
         volumes:
-            - ./backups/:/mnt/backups
+            - ./d.mysql/data/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
         links:
             - php:php
 
