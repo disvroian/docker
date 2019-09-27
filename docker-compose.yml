@@ -20,7 +20,7 @@ services:
             - NGINX_SERVER_NAME:www.smarties.local
             - NGINX_PORT:80
         links:
-            - mysql:mysql
+#            - mysql:mysql
             - php:php
     
     php:
@@ -34,19 +34,19 @@ services:
             - ./d.php-fpm/conf/memory.ini:/usr/local/etc/php/conf.d/memory.ini
             - ./d.php-fpm/conf/fpm-php.ini:/etc/php/7.2/fpm/php.ini
 
-    mysql:
-        container_name: mysql
-        image: mysql:5.7
-        restart: always
-        ports:
-            - "3306:3306"
-        environment:
-            - MYSQL_ROOT_PASSWORD=passw0rd
-        volumes:
-            - ./d.mysql/data/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
-        links:
-            - php:php
-
+#    mysql:
+#        container_name: mysql
+#        image: mysql:5.7
+#        restart: always
+#        ports:
+#            - "3306:3306"
+#        environment:
+#            - MYSQL_ROOT_PASSWORD=passw0rd
+#        volumes:
+#            - ./d.mysql/data/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+#        links:
+#            - php:php
+#
     redis:
         image: redis:latest
         restart: always
