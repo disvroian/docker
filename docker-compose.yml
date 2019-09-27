@@ -20,7 +20,6 @@ services:
             - NGINX_SERVER_NAME:www.smarties.local
             - NGINX_PORT:80
         links:
-#            - mysql:mysql
             - php:php
     
     php:
@@ -33,6 +32,16 @@ services:
             - ./www:/var/www
             - ./d.php-fpm/conf/memory.ini:/usr/local/etc/php/conf.d/memory.ini
             - ./d.php-fpm/conf/fpm-php.ini:/etc/php/7.2/fpm/php.ini
+
+    redis:
+        image: redis:latest
+        restart: always
+        ports:
+            - "6379:6379"
+        links:
+            - php:php
+
+
 
 #    mysql:
 #        container_name: mysql
@@ -47,14 +56,6 @@ services:
 #        links:
 #            - php:php
 #
-    redis:
-        image: redis:latest
-        restart: always
-        ports:
-            - "6379:6379"
-        links:
-            - php:php
-
 #    varnish:
 #        image: eeacms/varnish
 #        ports:
