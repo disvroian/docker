@@ -6,7 +6,7 @@ RUN docker-php-ext-install pdo mysqli
 RUN docker-php-ext-install pdo_mysql
 
 RUN apt-get update && apt-get install -y \
-        nano \
+        vim \
         git \
         openssh-client \
         cron \
