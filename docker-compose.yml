@@ -16,10 +16,12 @@ services:
         volumes:
             - ./www/html:/var/www/html
             - ./www/_opcache:/var/www/opcache
+            - ./www/_redis:/var/www/redis
             - ./certs:/var/certs
             - ./logs:/var/logs
             - ./d.nginx/conf/www.magento.conf:/etc/nginx/conf.d/magento.conf
             - ./d.nginx/conf/www.opcachegui.conf:/etc/nginx/conf.d/opcachegui.conf
+            - ./d.nginx/conf/www.redisgui.conf:/etc/nginx/conf.d/redisgui.conf
         links:
             - php:php
     
@@ -32,6 +34,7 @@ services:
         volumes:
             - ./www/html:/var/www/html
             - ./www/_opcache:/var/www/opcache
+            - ./www/_redis:/var/www/redis
             - ./logs:/var/logs
             - ./d.php-fpm/conf/php.ini:/usr/local/etc/php/php.ini
             - ./d.php-fpm/conf/php-fpm.conf:/usr/local/etc/php-fpm.conf
