@@ -35,27 +35,28 @@ services:
             - ./logs:/var/logs
             - ./d.php-fpm/conf/php.ini:/usr/local/etc/php/php.ini
             - ./d.php-fpm/conf/php-fpm.conf:/usr/local/etc/php-fpm.conf
-#
-#    varnish:
-#        image: eeacms/varnish
-#        ports:
-#            - "6081:6081"
-#            - "6085:6085"
-#        environment:
-#            DNS_ENABLED: "true"
-#            BACKENDS_PROBE_INTERVAL: "3s"
-#            BACKENDS_PROBE_TIMEOUT: "1s"
-#            BACKENDS_PROBE_WINDOW: "3"
-#            BACKENDS_PROBE_THRESHOLD: "2"
-#            DASHBOARD_USER: "admin"
-#            DASHBOARD_PASSWORD: "admin"
-#            DASHBOARD_SERVERS: "varnish"
-#            DASHBOARD_DNS_ENABLED: "true"
-#            PARAM_VALUE: "-p http_resp_hdr_len=65536 -p http_resp_size=98304"
-#        links:
-#            - "web:web"
-#        volumes:
-#            - ./conf/varnish/default.vcl:/etc/varnish/conf.d/varnish.vcl
+
+    varnish:
+        container_name: varnish
+        image: eeacms/varnish
+        ports:
+            - "6081:6081"
+            - "6085:6085"
+        environment:
+            DNS_ENABLED: "true"
+            BACKENDS_PROBE_INTERVAL: "3s"
+            BACKENDS_PROBE_TIMEOUT: "1s"
+            BACKENDS_PROBE_WINDOW: "3"
+            BACKENDS_PROBE_THRESHOLD: "2"
+            DASHBOARD_USER: "admin"
+            DASHBOARD_PASSWORD: "admin"
+            DASHBOARD_SERVERS: "varnish"
+            DASHBOARD_DNS_ENABLED: "true"
+            PARAM_VALUE: "-p http_resp_hdr_len=65536 -p http_resp_size=98304"
+        links:
+            - "nginx:nginx"
+        volumes:
+            - ./d.varnish/conf/default.vcl:/etc/varnish/conf.d/varnish.vcl
 #
 #    redis:
 #        image: redis:latest

@@ -31,5 +31,5 @@ RUN pecl install redis \
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-COPY conf/php-fpm.conf /usr/local/etc/php-fpm.conf
-COPY conf/php.ini /usr/local/etc/php/php.ini
+#COPY conf/php-fpm.conf /usr/local/etc/php-fpm.conf
+#COPY conf/php.ini /usr/local/etc/php/php.ini
